@@ -35,15 +35,15 @@ public class ImageFetcher : MonoBehaviour
 
     public string url {
         set {
-            if (value != _url) {
+            // if (value != _url) {
                 // abort old request
-                if (!request.isDone) {
-                    request.Abort();
-                }
-
-                _url = value;
-                StartCoroutine(DownloadImage(_url));
+            if (!request.isDone) {
+                request.Abort();
             }
+
+            _url = value;
+            StartCoroutine(DownloadImage(_url));
+            // }
             
         }
         get {

@@ -15,6 +15,8 @@ public class DataflowManager : MonoBehaviour
     public RawImage chartView;
     public ExternalOperationManager extOp;
 
+    public NodeInteraction selectedNode;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,6 @@ public class DataflowManager : MonoBehaviour
             nodes = JsonUtility.FromJson<NodeResponse>(request.downloadHandler.text);
 
             listener.CreateGraph(nodes.layout);
-            // Debug.Log(nodes.layout);
     } 
 
     // Update is called once per frame
@@ -40,17 +41,35 @@ public class DataflowManager : MonoBehaviour
         
     }
 
-    public void UpdateChartImage(string linkID) {
+    public void UpdateChartImage(string linkID, NodeInteraction n) {
+        if (selectedNode != null) {
+            selectedNode.isSelected = false;
+        }
+
+        chartView.gameObject.SetActive(true);
+
+        selectedNode = n;
+        n.isSelected = true;
+
         string newurl = api_root + "/image/" + linkID;
+        chartView.GetComponent<ImageFetcher>().url = newurl;
         // if (chartView.GetComponent<ImageFetcher>().url != newurl) {
-            chartView.GetComponent<ImageFetcher>().url = newurl;
         // }
     }
 
-    public void UpdateSelectedExternalOperation(string linkID) {
+    public void UpdateSelectedExternalOperation(string linkID, NodeInteraction n) {
+        if (selectedNode != null) {
+            selectedNode.isSelected = false;
+        }
+
+        chartView.gameObject.SetActive(false);
+
+        selectedNode = n;
+        n.isSelected = true;
+
         string newurl = api_root + "/external-operation/" + linkID;
+        extOp.url = newurl;
         // if (extOp.url !== newurl) {
-            extOp.url = newurl;
         // }
     }
 }
@@ -75,7 +94,7 @@ public class Node {
 
     public bool hasResult;
     public bool hasImage;
-    public bool requiresExternal;
+    public bool externalOperation;
 }
 
 [Serializable]
