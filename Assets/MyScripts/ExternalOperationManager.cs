@@ -219,7 +219,13 @@ public class ExternalOperationManager : MonoBehaviour
             );
 
             child.transform.localScale = new Vector3(scale, scale, scale);
-            child.transform.Find("DataLabel").localScale = new Vector3(0.1f / scale, 0.1f / scale, 0.1f / scale);
+            child.transform.Find("DataLabel").localScale = new Vector3(
+                0.1f / scale, 
+                0.1f / scale, 
+                0.1f / scale
+            );
+            
+            child.transform.Find("DataLabel").localPosition = new Vector3(0, scale / 2 + 0.1f, 0);
         }
     }
 
