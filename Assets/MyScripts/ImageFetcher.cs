@@ -12,8 +12,8 @@ public class ImageFetcher : MonoBehaviour
     private UnityWebRequest request;
     // Start is called before the first frame update
     void Start(){
-        StartCoroutine(DownloadImage(_url));
-        rawImage.color = new Color(256, 256, 256, 0);
+        // StartCoroutine(DownloadImage(_url));
+        rawImage.color = new Color(1, 1, 1, 0);
     }
 
     IEnumerator DownloadImage(string MediaUrl)
@@ -37,7 +37,7 @@ public class ImageFetcher : MonoBehaviour
         set {
             // if (value != _url) {
                 // abort old request
-            if (!request.isDone) {
+            if (request != null && !request.isDone) {
                 request.Abort();
             }
 

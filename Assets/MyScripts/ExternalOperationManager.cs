@@ -33,7 +33,7 @@ public class ExternalOperationManager : MonoBehaviour
         set {
             if (value != _url) { 
                 // abort old request
-                if (!request.isDone) {
+                if (request != null && !request.isDone) {
                     request.Abort();
                 }
 
@@ -53,7 +53,7 @@ public class ExternalOperationManager : MonoBehaviour
         yLabel = GameObject.Find("Axes/Y/Label").GetComponent<TextMesh>();
         zLabel = GameObject.Find("Axes/Z/Label").GetComponent<TextMesh>();
 
-        StartCoroutine(FetchInformation(_url));
+        // StartCoroutine(FetchInformation(_url));
     }
 
     IEnumerator FetchInformation(string DataUrl)
@@ -68,7 +68,7 @@ public class ExternalOperationManager : MonoBehaviour
             ProcessExtrema();
             CreateMenuOptions();
             PlotData();
-            SelectValue(data.data[56]);
+            // SelectValue(data.data[56]);
     }
 
     private void ProcessExtrema() {
@@ -155,8 +155,8 @@ public class ExternalOperationManager : MonoBehaviour
             extrema[2, 1]
         );
 
-
-        for (int i = 0; i < data.data.Length; i++) {
+        int i = 0;
+        for (i = 0; i < data.data.Length; i++) {
             GameObject newObj;
             if (i >= numExisting) {
                 // create new child
@@ -179,6 +179,10 @@ public class ExternalOperationManager : MonoBehaviour
                 ScaleValue(data.data[i].values[1], 1),
                 ScaleValue(data.data[i].values[2], 2)
             );
+        }
+
+        for (i = i; i < numExisting; i++) {
+            Destroy(dataGroup.transform.GetChild(i).gameObject);
         }
     }
 
@@ -216,6 +220,7 @@ public class ExternalOperationManager : MonoBehaviour
             );
 
             child.transform.localScale = new Vector3(scale, scale, scale);
+            child.transform.Find("DataLabel").localScale = new Vector3(0.1f / scale, 0.1f / scale, 0.1f / scale);
         }
     }
 

@@ -64,7 +64,9 @@ public class DataflowManager : MonoBehaviour
         }
 
         // chartView.gameObject.SetActive(false);
-        chartView.color = new Color(1, 1, 1, 0.5f);
+        if (selectedImageNode != null) {
+            chartView.color = new Color(1, 1, 1, 0.5f);
+        }
 
         selectedDataNode = n;
         n.isSelected = true;
