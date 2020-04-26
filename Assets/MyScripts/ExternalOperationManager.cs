@@ -68,7 +68,6 @@ public class ExternalOperationManager : MonoBehaviour
             ProcessExtrema();
             CreateMenuOptions();
             PlotData();
-            // SelectValue(data.data[56]);
     }
 
     private void ProcessExtrema() {
@@ -99,7 +98,7 @@ public class ExternalOperationManager : MonoBehaviour
         section.transform.Find("MenuSectionLabel").gameObject.GetComponent<Text>().text = "Sphere Size & Color";
         section.transform.parent = optionsMenu.transform.Find("MenuSections");
         // section.transform.localPosition = Vector3.zero;
-        section.transform.position = new Vector3(50, -50, 0);
+        section.transform.localPosition = new Vector3(.0325f, 0.24f, 0);
         section.transform.localScale = new Vector3(1, 1, 1);
 
         for (int i = 0; i < data.fields.Length; i++) {
@@ -109,7 +108,7 @@ public class ExternalOperationManager : MonoBehaviour
 
             option.transform.parent = section.transform;
             option.transform.localScale = new Vector3(1, 1, 1);
-            option.transform.localPosition = option.transform.localPosition + new Vector3(0, i * -0.075f, 0);
+            option.transform.localPosition = new Vector3(0, i * -0.08f, 0);
 
             option.GetComponent<Toggle>().group = option.GetComponentInParent<ToggleGroup>(); 
 

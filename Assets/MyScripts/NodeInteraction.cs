@@ -87,11 +87,17 @@ public class NodeInteraction : CAVE2Interactable
     void Update()
     {
         UpdateWandOverTimer();
+        bool isHovered = (showHoverOver && wandTouching) || (showPointingOver && wandPointing);
 
-        if((showHoverOver && wandTouching) || (showPointingOver && wandPointing) || isSelected)
+        if(isHovered || isSelected)
         {
             renderer.enabled = true;
-            label.SetActive(true);
+
+            if (isHovered) {
+                label.SetActive(true);
+            } else {
+                label.SetActive(false);
+            }
         }
         else
         {
