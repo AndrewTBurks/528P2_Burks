@@ -5,6 +5,7 @@ using UnityEngine;
 public class DataPointSelector : CAVE2Interactable
 {
     public DataElement data;
+    public GameObject label; 
 
     [SerializeField]
     bool showHoverOver = true;
@@ -65,19 +66,22 @@ public class DataPointSelector : CAVE2Interactable
         renderer.enabled = false;
 
         controller = GameObject.Find("ExternalOperationManager").GetComponent<ExternalOperationManager>();
-        // label = this.transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
+        UpdateWandOverTimer();
+
         if((showHoverOver && wandTouching) || (showPointingOver && wandPointing))
         {
             renderer.enabled = true;
+            label.SetActive(true);
         }
         else
         {
             renderer.enabled = false;
+            label.SetActive(false);
         }
         
     }
@@ -94,5 +98,11 @@ public class DataPointSelector : CAVE2Interactable
 
     public void setData(DataElement d) {
         data = d;
+
+        if (label != null) {
+            label.GetComponent<TextMesh>().text = d.label;
+        }
+
+
     }
 }

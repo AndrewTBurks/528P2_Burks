@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 
 public class ExternalOperationManager : MonoBehaviour
@@ -22,6 +23,11 @@ public class ExternalOperationManager : MonoBehaviour
     private TextMesh yLabel;
     private TextMesh zLabel;
     
+
+    public GameObject optionsMenu;
+    public GameObject menuSectionObject;
+    public GameObject menuOptionObject;
+    private int sizeAttribute;
 
     public string url {
         set {
@@ -60,6 +66,7 @@ public class ExternalOperationManager : MonoBehaviour
             data = JsonUtility.FromJson<ExternalOperationData>(request.downloadHandler.text);
             Debug.Log("fetched data: " + data.data.Length);
             ProcessExtrema();
+            CreateMenuOptions();
             PlotData();
             SelectValue(data.data[56]);
     }
@@ -73,6 +80,48 @@ public class ExternalOperationManager : MonoBehaviour
             extrema[i, 1] = vals.Max();
             Debug.Log(data.fields[i] + " " + extrema[i, 0] + " " + extrema[i, 1]);
         }
+    }
+
+    private void CreateMenuOptions() {
+        // foreach (Transform child in gameObject.transform) {
+        //     GameObject.Destroy(child.gameObject);
+        // }
+
+        int numSubMenus = 1;
+        Debug.Log(optionsMenu.GetComponent<OMenu>().menuItems.Length);
+        System.Array.Resize(ref optionsMenu.GetComponent<OMenu>().menuItems, data.fields.Length * numSubMenus);
+        Debug.Log(optionsMenu.GetComponent<OMenu>().menuItems.Length);
+        // myArray[myArray.GetUpperBound(0)] = newValue;
+        
+        // create menu section
+        var section = Instantiate(menuSectionObject);
+        // menuSectionObject.transform.localPosition.y = -50;
+        section.transform.Find("MenuSectionLabel").gameObject.GetComponent<Text>().text = "Sphere Size Attr.";
+        section.transform.parent = optionsMenu.transform.Find("MenuSections");
+        // section.transform.localPosition = Vector3.zero;
+        section.transform.position = new Vector3(50, -50, 0);
+        section.transform.localScale = new Vector3(1, 1, 1);
+
+        for (int i = 0; i < data.fields.Length; i++) {
+            Debug.Log("Create Option " + data.fields[i]);
+            var option = Instantiate(menuOptionObject);
+            option.transform.Find("Label").gameObject.GetComponent<Text>().text = data.fields[i];
+
+            option.transform.parent = section.transform;
+            option.transform.localScale = new Vector3(1, 1, 1);
+            option.transform.localPosition = option.transform.localPosition + new Vector3(0, i * -0.075f, 0);
+
+            option.GetComponent<Toggle>().group = option.GetComponentInParent<ToggleGroup>(); 
+
+            optionsMenu.GetComponent<OMenu>().menuItems[i] = (
+                option.GetComponent<Toggle>()
+            );
+            // option.transform.localPosition = new Vector3(0, 7.5f * (i + 1), 0);
+        }
+    }
+
+    private void SelectSize(int number, bool isSelected) {
+
     }
 
     private void PlotData() {
@@ -176,4 +225,5 @@ public class ExternalOperationData {
 public class DataElement {
     public int __key__;
     public float[] values;
+    public string label;
 }
