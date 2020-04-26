@@ -83,9 +83,9 @@ public class ExternalOperationManager : MonoBehaviour
     }
 
     private void CreateMenuOptions() {
-        // foreach (Transform child in gameObject.transform) {
-        //     GameObject.Destroy(child.gameObject);
-        // }
+        foreach (Transform child in optionsMenu.transform.Find("MenuSections")) {
+            GameObject.Destroy(child.gameObject);
+        }
 
         int numSubMenus = 1;
         Debug.Log(optionsMenu.GetComponent<OMenu>().menuItems.Length);
@@ -96,7 +96,7 @@ public class ExternalOperationManager : MonoBehaviour
         // create menu section
         var section = Instantiate(menuSectionObject);
         // menuSectionObject.transform.localPosition.y = -50;
-        section.transform.Find("MenuSectionLabel").gameObject.GetComponent<Text>().text = "Sphere Size Attr.";
+        section.transform.Find("MenuSectionLabel").gameObject.GetComponent<Text>().text = "Sphere Size & Color";
         section.transform.parent = optionsMenu.transform.Find("MenuSections");
         // section.transform.localPosition = Vector3.zero;
         section.transform.position = new Vector3(50, -50, 0);
@@ -116,12 +116,21 @@ public class ExternalOperationManager : MonoBehaviour
             optionsMenu.GetComponent<OMenu>().menuItems[i] = (
                 option.GetComponent<Toggle>()
             );
+
+            var attrIndex = i;
+            option.GetComponent<Toggle>().onValueChanged.AddListener((bool isOn) => {
+                if (isOn)
+                    SelectSize(attrIndex, isOn);
+            });
+
             // option.transform.localPosition = new Vector3(0, 7.5f * (i + 1), 0);
         }
     }
 
     private void SelectSize(int number, bool isSelected) {
-
+        Debug.Log("Toggle: " + data.fields[number] + " " + isSelected );
+        sizeAttribute = number;
+        ScaleDataPoints();
     }
 
     private void PlotData() {
@@ -178,6 +187,36 @@ public class ExternalOperationManager : MonoBehaviour
             (value - extrema[index, 0])
             / (extrema[index, 1] - extrema[index, 0])
         ) * (range[1] - range[0])) + range[0];
+    }
+
+    private void ScaleDataPoints() {
+        var numExisting = dataGroup.transform.childCount;
+
+        for (var ind = 0; ind < numExisting; ind++) {
+            var child = dataGroup.transform.GetChild(ind);
+            var d = child.GetComponent<DataPointSelector>().data;
+
+            float scale = System.Math.Max(ScaleValue(d.values[sizeAttribute], sizeAttribute) / 12.5f, 0.1f);
+            child.transform.localScale = 
+                new Vector3(scale, scale, scale);
+            
+            float[] colorVals = {1, 1, 1};
+
+            for (var c = 0; c < 3;  c++) {
+                if (c != sizeAttribute) {
+                    colorVals[c] = 1 - (scale / 2f);
+                }
+            }
+
+
+            child.GetComponent<Renderer>().material.color = new Color(
+                colorVals[0], 
+                colorVals[1], 
+                colorVals[2]
+            );
+
+            child.transform.localScale = new Vector3(scale, scale, scale);
+        }
     }
 
     public void SelectValue(DataElement el) {

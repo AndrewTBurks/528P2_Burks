@@ -88,5 +88,7 @@ public class GraphDrawing : MonoBehaviour
                     .material.color = colors[n.snippetInfo.type + "-link"];
         }
 
+        this.gameObject.transform.rotation = Quaternion.LookRotation(gameObject.transform.position - GameObject.Find("CAVE2-PlayerController").transform.position);
+
     }
 }

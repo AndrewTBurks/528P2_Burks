@@ -15,7 +15,8 @@ public class DataflowManager : MonoBehaviour
     public RawImage chartView;
     public ExternalOperationManager extOp;
 
-    public NodeInteraction selectedNode;
+    public NodeInteraction selectedImageNode;
+    public NodeInteraction selectedDataNode;
 
     // Start is called before the first frame update
     void Start()
@@ -42,13 +43,13 @@ public class DataflowManager : MonoBehaviour
     }
 
     public void UpdateChartImage(string linkID, NodeInteraction n) {
-        if (selectedNode != null) {
-            selectedNode.isSelected = false;
+        if (selectedImageNode != null) {
+            selectedImageNode.isSelected = false;
         }
 
         chartView.gameObject.SetActive(true);
 
-        selectedNode = n;
+        selectedImageNode = n;
         n.isSelected = true;
 
         string newurl = api_root + "/image/" + linkID;
@@ -58,13 +59,14 @@ public class DataflowManager : MonoBehaviour
     }
 
     public void UpdateSelectedExternalOperation(string linkID, NodeInteraction n) {
-        if (selectedNode != null) {
-            selectedNode.isSelected = false;
+        if (selectedDataNode != null) {
+            selectedDataNode.isSelected = false;
         }
 
-        chartView.gameObject.SetActive(false);
+        // chartView.gameObject.SetActive(false);
+        chartView.color = new Color(1, 1, 1, 0.5f);
 
-        selectedNode = n;
+        selectedDataNode = n;
         n.isSelected = true;
 
         string newurl = api_root + "/external-operation/" + linkID;

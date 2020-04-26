@@ -28,7 +28,7 @@ public class NodeInteraction : CAVE2Interactable
     bool showPointingOver = true;
 
     [SerializeField]
-    float highlightScaler = 1.1f;
+    float highlightScaler = 1.5f;
 
     [SerializeField]
     Mesh defaultMesh;
@@ -39,9 +39,6 @@ public class NodeInteraction : CAVE2Interactable
 
     GameObject hoverOverHighlight;
     new MeshRenderer renderer;
-
-    bool progressUp = true;
-    float strobeProgress = 0.5f;
 
     Color originalHoverMatColor;
 
@@ -68,7 +65,7 @@ public class NodeInteraction : CAVE2Interactable
         {
             // Create a basic highlight material
             hoverOverMaterial = new Material(Shader.Find("Standard"));
-            hoverOverMaterial.SetColor("_Color", new Color(117 / 255f, 107 / 255f, 177 / 255f, 0.25f));
+            hoverOverMaterial.SetColor("_Color", new Color(117 / 255f, 107 / 255f, 177 / 255f, 0.5f));
             hoverOverMaterial.SetFloat("_Mode", 3); // Transparent
             hoverOverMaterial.SetFloat("_Glossiness", 0);
         }
@@ -78,6 +75,7 @@ public class NodeInteraction : CAVE2Interactable
         }
         originalHoverMatColor = hoverOverMaterial.color;
         renderer.material = hoverOverMaterial;
+        renderer.material.color = new Color(117 / 255f, 107 / 255f, 177 / 255f, 0.5f);
 
         renderer.enabled = false;
 
